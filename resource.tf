@@ -9,36 +9,36 @@ resource "aws_instance" "terransible" {
 }
 
 
-# resource "null_resource" "install_ansible" {
+resource "null_resource" "install_ansible" {
 
-#   count = var.instance_count
+  count = var.instance_count
 
-#   # ssh into EC2 instance
-#   connection {
-#     type        = "ssh"
-#     user        = "ubuntu"
-#     private_key = file("./mtc-terransible.pem")
-#     host        = aws_instance.terransible[count.index].public_ip
-#   }
+  # ssh into EC2 instance
+  connection {
+    type        = "ssh"
+    user        = "ubuntu"
+    private_key = file("./mtc-terransible.pem")
+    host        = aws_instance.terransible[count.index].public_ip
+  }
 
-#   # copy the install_ansible.sh file from our computer to the EC2 instance
-#   provisioner "file" {
-#     source      = "./install_ansible.sh"
-#     destination = "/tmp/install_ansible.sh"
+  # copy the install_ansible.sh file from our computer to the EC2 instance
+  provisioner "file" {
+    source      = "./install_ansible.sh"
+    destination = "/tmp/install_ansible.sh"
 
-#   }
+  }
 
-#   # set permission & run the install_ansible.sh file
-#   provisioner "remote-exec" {
-#     inline = [
-#       "sudo chmod +x /tmp/install_ansible.sh",
-#       "sudo sh /tmp/install_ansible.sh",
-#     ]
-#   }
+  # set permission & run the install_ansible.sh file
+  provisioner "remote-exec" {
+    inline = [
+      "sudo chmod +x /tmp/install_ansible.sh",
+      "sudo sh /tmp/install_ansible.sh",
+    ]
+  }
 
-  # wait for ec2 to be created
-#   depends_on = [aws_instance.terransible]
-# }
+  wait for ec2 to be created
+  depends_on = [aws_instance.terransible]
+}
 
 
 
