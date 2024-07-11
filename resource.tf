@@ -36,7 +36,7 @@ resource "null_resource" "install_ansible" {
     ]
   }
 
-  wait for ec2 to be created
+  # wait for ec2 to be created
   depends_on = [aws_instance.terransible]
 }
 
