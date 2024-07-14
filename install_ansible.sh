@@ -86,3 +86,6 @@ echo "Content added to $HOSTS_FILE. Your original hosts file is backed up as $HO
 
 # Restore needrestart hook if it was disabled
 [ -f /etc/dpkg/dpkg.cfg.d/needrestart.disabled ] && mv /etc/dpkg/dpkg.cfg.d/needrestart.disabled /etc/dpkg/dpkg.cfg.d/needrestart
+
+# Ensure script terminates correctly and restores needrestart hook
+#trap '[ -f /etc/dpkg/dpkg.cfg.d/needrestart.disabled ] && mv /etc/dpkg/dpkg.cfg.d/needrestart.disabled /etc/dpkg/dpkg.cfg.d/needrestart' EXIT
