@@ -3,9 +3,14 @@
 # Make the script non-interactive
 export DEBIAN_FRONTEND=noninteractive
 
+echo "* libraries/restart-without-asking boolean true" | sudo debconf-set-selections
+
+# Update and upgrade the system
+sudo apt-get update -y
+sudo apt-get upgrade -y -o Dpkg::Options::="--force-confnew" -o Dpkg::Options::="--force-confdef"
+
 
 # Install Ansible for ubuntu 22
-sudo apt update -y
 sudo apt-add-repository ppa:ansible/ansible -y
 sudo apt update -y
 sudo apt upgrade -y
@@ -19,7 +24,7 @@ python3 -m pip install boto3
 
 # Install AWS CLI
 sudo apt update -y
-sudo apt install curl unzip
+sudo apt install curl unzip -y
 curl "https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip" -o "awscliv2.zip"
 unzip awscliv2.zip
 sudo ./aws/install
