@@ -1,5 +1,9 @@
 #!/bin/bash
 
+# Make the script non-interactive
+export DEBIAN_FRONTEND=noninteractive
+
+
 # Install Ansible for ubuntu 22
 sudo apt update -y
 sudo apt-add-repository ppa:ansible/ansible -y
@@ -15,9 +19,8 @@ python3 -m pip install boto3
 
 # Install AWS CLI
 sudo apt update -y
-sudo apt install curl
+sudo apt install curl unzip
 curl "https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip" -o "awscliv2.zip"
-sudo apt install unzip
 unzip awscliv2.zip
 sudo ./aws/install
 
