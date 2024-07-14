@@ -89,3 +89,20 @@ echo "Content added to $HOSTS_FILE. Your original hosts file is backed up as $HO
 
 # Ensure script terminates correctly and restores needrestart hook
 #trap '[ -f /etc/dpkg/dpkg.cfg.d/needrestart.disabled ] && mv /etc/dpkg/dpkg.cfg.d/needrestart.disabled /etc/dpkg/dpkg.cfg.d/needrestart' EXIT
+
+# Script to generate SSH key pair without passphrase
+
+# Set default key file path and name
+KEY_FILE="$HOME/.ssh/id_rsa"
+
+# Generate SSH key pair without passphrase
+echo "Generating SSH key pair..."
+ssh-keygen -t rsa -b 4096 -N "" -f "$KEY_FILE"
+
+# Check if key generation was successful
+if [[ $? -eq 0 ]]; then
+    echo "SSH key pair generated successfully."
+    echo "Public key saved in: ${KEY_FILE}.pub"
+else
+    echo "Error: Failed to generate SSH key pair."
+fi
