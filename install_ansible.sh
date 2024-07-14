@@ -77,3 +77,4 @@ echo "$HOSTS_CONTENT" | sudo tee -a "$HOSTS_FILE" > /dev/null
 echo "Content added to $HOSTS_FILE. Your original hosts file is backed up as $HOSTS_FILE.bak."
 
 
+
