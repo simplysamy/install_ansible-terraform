@@ -3,42 +3,45 @@
 # Make the script non-interactive
 export DEBIAN_FRONTEND=noninteractive
 
+# Set NEEDRESTART_SUSPEND to a non-empty value and export it
+export NEEDRESTART_SUSPEND=1
+
+# Set NEEDRESTART_MODE to either “automatic” or “list”
+export NEEDRESTART_MODE=automatic
+
+# Disable the dpkg needrestart hook if it exists
+[ -f /etc/dpkg/dpkg.cfg.d/needrestart ] && mv /etc/dpkg/dpkg.cfg.d/needrestart /etc/dpkg/dpkg.cfg.d/needrestart.disabled
+
 echo "* libraries/restart-without-asking boolean true" | sudo debconf-set-selections
 
 # Update and upgrade the system
 sudo apt-get update -y
-sudo apt-get upgrade -y -o Dpkg::Options::="--force-confnew" -o Dpkg::Options::="--force-confdef"
+sudo apt-get upgrade -y -o 
 
-
-# Install Ansible for ubuntu 22
+# Install Ansible for Ubuntu 22
 sudo apt-add-repository ppa:ansible/ansible -y
 sudo apt update -y
 sudo apt upgrade -y
 sudo apt install -y ansible
 
 # Install Python3-pip
-sudo apt install python3-pip -y
+sudo apt install -y python3-pip
 
 # Install Boto3
 python3 -m pip install boto3
 
 # Install AWS CLI
 sudo apt update -y
-sudo apt install curl unzip -y
+sudo apt install -y curl unzip
 curl "https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip" -o "awscliv2.zip"
 unzip awscliv2.zip
 sudo ./aws/install
 
-# install terraform
+# Install Terraform
 wget -O- https://apt.releases.hashicorp.com/gpg | gpg --dearmor | sudo tee /usr/share/keyrings/hashicorp-archive-keyring.gpg
-
-echo "deb [signed-by=/usr/share/keyrings/hashicorp-archive-keyring.gpg] https://apt.releases.hashicorp.com $(lsb_release -cs) main" | \
-sudo tee /etc/apt/sources.list.d/hashicorp.list
-
+echo "deb [signed-by=/usr/share/keyrings/hashicorp-archive-keyring.gpg] https://apt.releases.hashicorp.com $(lsb_release -cs) main" | sudo tee /etc/apt/sources.list.d/hashicorp.list
 sudo apt update
-sudo apt install terraform -y
-
-
+sudo apt install -y terraform
 
 # Define the configuration content for ansible.cfg file
 CONFIG_CONTENT="[defaults]
@@ -64,7 +67,7 @@ echo "$CONFIG_CONTENT" | sudo tee "$ANSIBLE_CFG_PATH" > /dev/null
 
 echo "Configuration completed. Your original ansible.cfg is backed up as ansible.cfg.bak."
 
-# Specify the content to be added to ansibles hosts file
+# Specify the content to be added to Ansible hosts file
 HOSTS_CONTENT="[hosts]
 localhost"
 
@@ -81,5 +84,5 @@ echo "$HOSTS_CONTENT" | sudo tee -a "$HOSTS_FILE" > /dev/null
 
 echo "Content added to $HOSTS_FILE. Your original hosts file is backed up as $HOSTS_FILE.bak."
 
-
-
+# Restore needrestart hook if it was disabled
+[ -f /etc/dpkg/dpkg.cfg.d/needrestart.disabled ] && mv /etc/dpkg/dpkg.cfg.d/needrestart.disabled /etc/dpkg/dpkg.cfg.d/needrestart
