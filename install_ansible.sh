@@ -99,10 +99,3 @@ KEY_FILE="$HOME/.ssh/id_rsa"
 echo "Generating SSH key pair..."
 ssh-keygen -t rsa -b 4096 -N "" -f "$KEY_FILE"
 
-# Check if key generation was successful
-if [[ $? -eq 0 ]]; then
-    echo "SSH key pair generated successfully."
-    echo "Public key saved in: ${KEY_FILE}.pub"
-else
-    echo "Error: Failed to generate SSH key pair."
-fi
